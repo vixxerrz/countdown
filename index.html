@@ -193,24 +193,36 @@
             }
 
             .countdown {
-                gap: 1rem;
+                gap: 0.5rem;
+                flex-wrap: nowrap;
             }
 
             .time-unit {
-                min-width: 100px;
-                padding: 1.5rem 1rem;
+                min-width: 60px;
+                padding: 1rem 0.5rem;
             }
 
             .value {
-                font-size: 2.5rem;
+                font-size: 1.8rem;
             }
 
             .label {
-                font-size: 0.75rem;
+                font-size: 0.6rem;
             }
 
             .separator {
-                font-size: 2.5rem;
+                font-size: 1.8rem;
+            }
+
+            .floating-links-container {
+                gap: 1rem;
+                margin-top: 2rem;
+            }
+
+            .floating-link {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
             }
         }
 
@@ -225,31 +237,37 @@
             }
 
             .countdown {
-                gap: 0.5rem;
+                gap: 0.3rem;
+                flex-wrap: nowrap;
             }
 
             .time-unit {
-                min-width: 70px;
-                padding: 1rem 0.5rem;
+                min-width: 45px;
+                padding: 0.8rem 0.3rem;
             }
 
             .value {
-                font-size: 1.8rem;
+                font-size: 1.4rem;
             }
 
             .label {
-                font-size: 0.6rem;
+                font-size: 0.5rem;
                 letter-spacing: 0.1em;
             }
 
             .separator {
-                font-size: 1.8rem;
+                font-size: 1.4rem;
+            }
+
+            .floating-links-container {
+                gap: 0.8rem;
+                margin-top: 1.5rem;
             }
 
             .floating-link {
-                width: 50px;
-                height: 50px;
-                font-size: 1.5rem;
+                width: 45px;
+                height: 45px;
+                font-size: 1.2rem;
             }
         }
 
@@ -313,8 +331,14 @@
         }
 
         /* Floating Links */
+        .floating-links-container {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
         .floating-link {
-            position: fixed;
             padding: 0.5rem;
             background: rgba(255, 255, 255, 0.06);
             backdrop-filter: blur(10px);
@@ -350,18 +374,6 @@
             background: rgba(34, 197, 94, 0.08);
             border-color: rgba(34, 197, 94, 0.45);
             transform: translateY(-2px);
-        }
-
-        .link-1 {
-            animation-delay: 0s;
-        }
-
-        .link-2 {
-            animation-delay: 1s;
-        }
-
-        .link-3 {
-            animation-delay: 2s;
         }
 
         /* Preview Modal */
@@ -475,22 +487,6 @@
     
     <div class="background-particles" id="particles"></div>
     
-    <a href="#" class="floating-link link-1" data-image="acadamiccal.jpg" data-title="Academic Calendar">📅</a>
-    <a href="https://dhaec.edupage.org" class="floating-link link-2" target="_blank">📚</a>
-    <a href="https://vixxerrz.github.io/GRD10/mendel/" class="floating-link link-3" target="_blank"><img src="logo.png" alt="Mendel"></a>
-    
-    <div id="imageModalBackdrop" class="image-preview-backdrop" role="dialog" aria-modal="true" aria-label="Image preview">
-      <div class="image-preview-container">
-        <div class="image-preview-header">
-          <h3 id="imageModalTitle" class="image-preview-title">Image Preview</h3>
-          <button id="imageModalClose" class="image-preview-close" type="button">X</button>
-        </div>
-        <div class="image-preview-content">
-          <img id="imageModalImg" src="" alt="" class="preview-image">
-        </div>
-      </div>
-    </div>
-    
     <div class="container" id="mainContent">
         <div class="total-days" id="totalDays">0</div>
         <h1 class="title">DAYS LEFT</h1>
@@ -519,6 +515,23 @@
                 <div class="value" id="seconds">00</div>
             </div>
         </div>
+        <div class="floating-links-container">
+            <a href="#" class="floating-link" data-image="acadamiccal.jpg" data-title="Academic Calendar">📅</a>
+            <a href="https://dhaec.edupage.org" class="floating-link" target="_blank">📚</a>
+            <a href="https://vixxerrz.github.io/GRD10/mendel/" class="floating-link" target="_blank"><img src="logo.png" alt="Mendel"></a>
+        </div>
+    </div>
+
+    <div id="imageModalBackdrop" class="image-preview-backdrop" role="dialog" aria-modal="true" aria-label="Image preview">
+      <div class="image-preview-container">
+        <div class="image-preview-header">
+          <h3 id="imageModalTitle" class="image-preview-title">Image Preview</h3>
+          <button id="imageModalClose" class="image-preview-close" type="button">X</button>
+        </div>
+        <div class="image-preview-content">
+          <img id="imageModalImg" src="" alt="" class="preview-image">
+        </div>
+      </div>
     </div>
 
     <script>
@@ -608,81 +621,14 @@
 
             const container = document.getElementById('mainContent');
             const particles = document.getElementById('particles');
-            const floatingLinks = document.querySelectorAll('.floating-link');
             
             container.style.transform = `translate(${currentX}px, ${currentY}px)`;
             particles.style.transform = `translate(${currentX * 0.5}px, ${currentY * 0.5}px)`;
-            
-            floatingLinks.forEach((link, index) => {
-                const depth = (index + 1) * 0.4;
-                const baseTransform = link.dataset.baseTransform || 'translateY(0px)';
-                link.style.transform = `${baseTransform} translate(${currentX * depth}px, ${currentY * depth}px)`;
-            });
 
             requestAnimationFrame(animateParallax);
         }
 
         animateParallax();
-
-        // Randomize floating link positions and make draggable
-        function randomizeLinkPositions() {
-            const floatingLinks = document.querySelectorAll('.floating-link');
-            const padding = 100;
-            const centerX = window.innerWidth / 2;
-            const centerY = window.innerHeight / 2;
-            const exclusionRadius = 300; // Keep away from center/clock
-            
-            floatingLinks.forEach(link => {
-                let randomX, randomY, distance;
-                let attempts = 0;
-                
-                do {
-                    randomX = padding + Math.random() * (window.innerWidth - padding * 2);
-                    randomY = padding + Math.random() * (window.innerHeight - padding * 2);
-                    distance = Math.sqrt(Math.pow(randomX - centerX, 2) + Math.pow(randomY - centerY, 2));
-                    attempts++;
-                } while (distance < exclusionRadius && attempts < 100);
-                
-                link.style.left = randomX + 'px';
-                link.style.top = randomY + 'px';
-                link.style.right = 'auto';
-                link.style.bottom = 'auto';
-            });
-        }
-
-        // Make links draggable
-        function makeDraggable(element) {
-            let isDragging = false;
-            let startX, startY, initialX, initialY;
-
-            element.addEventListener('mousedown', (e) => {
-                isDragging = true;
-                startX = e.clientX;
-                startY = e.clientY;
-                initialX = element.offsetLeft;
-                initialY = element.offsetTop;
-                element.style.cursor = 'grabbing';
-            });
-
-            document.addEventListener('mousemove', (e) => {
-                if (!isDragging) return;
-                
-                const dx = e.clientX - startX;
-                const dy = e.clientY - startY;
-                
-                element.style.left = (initialX + dx) + 'px';
-                element.style.top = (initialY + dy) + 'px';
-            });
-
-            document.addEventListener('mouseup', () => {
-                isDragging = false;
-                element.style.cursor = 'grab';
-            });
-        }
-
-        // Initialize floating links
-        randomizeLinkPositions();
-        document.querySelectorAll('.floating-link').forEach(makeDraggable);
 
         // Image preview modal functionality
         function imageModalApi() {
